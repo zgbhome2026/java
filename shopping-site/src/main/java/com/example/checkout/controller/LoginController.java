@@ -16,7 +16,6 @@ public class LoginController {
 
     @PostMapping("/login")
     public String handleLogin(@RequestParam String email, @RequestParam String password, Model model) {
-        // Mock authentication check
         if ("buyer@example.com".equals(email) && "password123".equals(password)) {
             return "redirect:/store";
         }

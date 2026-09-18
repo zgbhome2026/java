@@ -1,0 +1,21 @@
+replicaCount: 1
+
+image:
+  repository: java-shopping-app
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+postgres:
+  image: postgres:15-alpine
+  dbName: shoppingdb
+  user: admin
+  password: secretpassword
+
+service:
+  type: NodePort
+  tomcatPort: 8080
+  nodePort: 30080
+
+storage:
+  className: local-path
+  size: 1Gi

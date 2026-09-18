@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-tomcat-app
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: tomcat-app
+  template:
+    metadata:
+      labels:
+        app: tomcat-app
+    spec:
+      containers:
+      - name: tomcat
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.service.tomcatPort }}
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://postgres-svc:5432/{{ .Values.postgres.dbName }}
+        - name: SPRING_DATASOURCE_USERNAME
+          value: {{ .Values.postgres.user }}
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: {{ .Values.postgres.password }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-shopping-svc
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app: tomcat-app
+  ports:
+  - port: {{ .Values.service.tomcatPort }}
+    targetPort: {{ .Values.service.tomcatPort }}
+    nodePort: {{ .Values.service.nodePort }}

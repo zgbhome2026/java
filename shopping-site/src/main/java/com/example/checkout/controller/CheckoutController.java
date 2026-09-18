@@ -11,12 +11,10 @@ public class CheckoutController {
 
     @PostMapping("/checkout")
     public ResponseEntity<OrderResponse> processCheckout(@RequestBody OrderRequest request) {
-        // Validate cart and calculate total
         BigDecimal totalAmount = request.getItems().stream()
                 .map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        // Mock payment processing logic
         String orderId = "ORD-" + System.currentTimeMillis();
         boolean paymentSuccess = totalAmount.compareTo(BigDecimal.ZERO) > 0;
 

@@ -12,15 +12,13 @@ import java.util.List;
 @Controller
 public class ShoppingController {
 
-    // Mock product catalog data
     private static final List<Product> PRODUCTS = List.of(
         new Product("P1", "Wireless Mouse", new BigDecimal("29.99")),
         new Product("P2", "Mechanical Keyboard", new BigDecimal("89.99")),
         new Product("P3", "USB-C Hub", new BigDecimal("19.99"))
     );
 
-    // In-memory cart for demonstration
-    private final List<CartItem> cart = new ArrayList<>();
+    private final List<CartItemModel> cart = new ArrayList<>();
 
     @GetMapping("/store")
     public String viewStore(Model model) {
@@ -38,7 +36,7 @@ public class ShoppingController {
                 .orElse(null);
 
         if (found != null) {
-            cart.add(new CartItem(found.getId(), found.getName(), found.getPrice(), quantity));
+            cart.add(new CartItemModel(found.getId(), found.getName(), found.getPrice(), quantity));
         }
         return "redirect:/store";
     }
@@ -64,4 +62,23 @@ class Product {
     public String getId() { return id; }
     public String getName() { return name; }
     public BigDecimal getPrice() { return price; }
+}
+
+class CartItemModel {
+    private String id;
+    private String name;
+    private BigDecimal price;
+    private int quantity;
+
+    public CartItemModel(String id, String name, BigDecimal price, int quantity) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
+    public String getId() { return id; }
+    public String getName() { return name; }
+    public BigDecimal getPrice() { return price; }
+    public int getQuantity() { return quantity; }
 }
