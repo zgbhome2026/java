@@ -1,0 +1,17 @@
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/auth/LoginHistoryRepository.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/auth/SessionService.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/product/ProductController.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/cart/CartController.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/checkout/CheckoutService.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/auth/dto/LoginResponse.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/checkout/CheckoutController.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/auth/UserRepository.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/cart/dto/CartItemRequest.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/auth/dto/RegisterRequest.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/common/ApiExceptionHandler.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/auth/AuthService.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/product/ProductRepository.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/ShoppingApplication.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/auth/AuthController.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/auth/dto/LoginRequest.java
+/shop/shopping-java-app-jar/src/main/java/com/example/shopping/cart/CartService.java

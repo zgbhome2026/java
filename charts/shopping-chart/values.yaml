@@ -1,0 +1,19 @@
+image:
+  repository: java-shopping-app
+  tag: "1.0.0"
+  pullPolicy: IfNotPresent
+  pullSecret: ""
+app:
+  nodeSelector: {}
+postgres:
+  image: postgres:15-alpine
+  dbName: shoppingdb
+  user: shopping
+  existingSecret: shopping-db-credentials
+service:
+  type: NodePort
+  port: 8080
+  nodePort: 30082
+storage:
+  className: local-path-retain
+  size: 1Gi
