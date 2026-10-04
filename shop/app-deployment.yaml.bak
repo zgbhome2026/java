@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-shopping-app
+  labels:
+    app: java-shopping-app
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: java-shopping-app
+
+  template:
+    metadata:
+      labels:
+        app: java-shopping-app
+
+    spec:
+      containers:
+      - name: java-app
+        image: tomcat:9-jdk17-temurin
+        imagePullPolicy: IfNotPresent
+
+        ports:
+        - containerPort: 8080
+
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:postgresql://postgres-svc:5432/shoppingdb"
+
+        - name: SPRING_DATASOURCE_USERNAME
+          value: "admin"
+
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "secretpassword"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-shopping-svc
+
+spec:
+  type: NodePort
+
+  selector:
+    app: java-shopping-app
+
+  ports:
+  - port: 8080
+    targetPort: 8080
+    nodePort: 30080

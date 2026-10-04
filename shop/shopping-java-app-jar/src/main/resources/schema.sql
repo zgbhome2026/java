@@ -1,0 +1,70 @@
+CREATE TABLE IF NOT EXISTS users (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(50) DEFAULT 'USER',
+    enabled BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS login_history (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+    username VARCHAR(100),
+    login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ip_address VARCHAR(45),
+    success BOOLEAN NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS user_sessions (
+    token VARCHAR(100) PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    expires_at TIMESTAMP NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS products (
+    id BIGSERIAL PRIMARY KEY,
+    sku VARCHAR(100) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    price NUMERIC(12,2) NOT NULL CHECK (price >= 0),
+    stock INTEGER NOT NULL DEFAULT 0 CHECK (stock >= 0),
+    active BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE IF NOT EXISTS carts (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS cart_items (
+    cart_id BIGINT NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
+    product_id BIGINT NOT NULL REFERENCES products(id),
+    quantity INTEGER NOT NULL CHECK (quantity > 0),
+    PRIMARY KEY (cart_id, product_id)
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id),
+    total_amount NUMERIC(12,2) NOT NULL,
+    status VARCHAR(50) NOT NULL DEFAULT 'PAID',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS order_items (
+    id BIGSERIAL PRIMARY KEY,
+    order_id BIGINT NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+    product_id BIGINT NOT NULL,
+    product_name VARCHAR(255) NOT NULL,
+    unit_price NUMERIC(12,2) NOT NULL,
+    quantity INTEGER NOT NULL,
+    line_total NUMERIC(12,2) NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_login_history_user_id ON login_history(user_id);
+CREATE INDEX IF NOT EXISTS idx_login_history_login_time ON login_history(login_time);
+CREATE INDEX IF NOT EXISTS idx_orders_user_id ON orders(user_id);

@@ -1,0 +1,5 @@
+apiVersion: v2
+name: shopping-chart
+description: PostgreSQL-backed demo shop for Kubernetes
+version: 1.0.0
+appVersion: "1.0.0"

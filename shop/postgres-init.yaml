@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init
+data:
+  01-login.sql: |
+    CREATE TABLE IF NOT EXISTS users (
+        id BIGSERIAL PRIMARY KEY,
+        username VARCHAR(100) UNIQUE NOT NULL,
+        email VARCHAR(255) UNIQUE,
+        password_hash VARCHAR(255) NOT NULL,
+        role VARCHAR(50) DEFAULT 'USER',
+        enabled BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+
+    CREATE TABLE IF NOT EXISTS login_history (
+        id BIGSERIAL PRIMARY KEY,
+        user_id BIGINT,
+        username VARCHAR(100),
+        login_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        ip_address VARCHAR(45),
+        user_agent TEXT,
+        success BOOLEAN NOT NULL,
+        failure_reason VARCHAR(255),
+
+        CONSTRAINT fk_login_user
+          FOREIGN KEY (user_id)
+          REFERENCES users(id)
+          ON DELETE SET NULL
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_login_history_user_id
+      ON login_history(user_id);
+
+    CREATE INDEX IF NOT EXISTS idx_login_history_login_time
+      ON login_history(login_time);
